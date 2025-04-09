@@ -40,8 +40,8 @@ func NewBotService() *BotService {
 
 func (b *BotService) CallbackHandler(c *gin.Context) {
 	log.Printf("---CallbackHandler.")
-	channelToken := global.ServerConfig.LineConfig.ChannelToken
-	cb, err := webhook.ParseRequest(channelToken, c.Request)
+	channelSecret := global.ServerConfig.LineConfig.ChannelSecret
+	cb, err := webhook.ParseRequest(channelSecret, c.Request)
 	log.Printf("---cb:%+v", cb)
 	log.Printf("---err:%+v", err)
 	if err != nil {
