@@ -42,6 +42,8 @@ func (b *BotService) CallbackHandler(c *gin.Context) {
 	log.Printf("---CallbackHandler.")
 	channelToken := global.ServerConfig.LineConfig.ChannelToken
 	cb, err := webhook.ParseRequest(channelToken, c.Request)
+	log.Printf("---cb:%+v", cb)
+	log.Printf("---err:%+v", err)
 	if err != nil {
 		if errors.Is(err, linebot.ErrInvalidSignature) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
