@@ -9,6 +9,7 @@ import (
 	"linebot-go/global"
 	"linebot-go/infrastructure/config"
 	"linebot-go/interface/http/router"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -26,6 +27,7 @@ func main() {
 	// start
 	global.AppName = "lineBot"
 	global.ServerConfig = config.NewServerConfig()
+	log.Printf("serverConfig: %+v", global.ServerConfig)
 	app := cmd.InitApp()
 	ginRouter := router.InitRouter(app)
 	InitHttpServer(ginRouter)

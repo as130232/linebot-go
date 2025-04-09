@@ -9,6 +9,8 @@ import (
 
 func InitRouter(app *cmd.App) *gin.Engine {
 	router := gin.New()
+	gin.SetMode(global.ServerConfig.HttpServer.Mode)
+
 	//swagger
 	//docs.Swagger.Title = ""
 
