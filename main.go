@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -27,7 +28,8 @@ func main() {
 	// start
 	global.AppName = "lineBot"
 	global.ServerConfig = config.NewServerConfig()
-	log.Printf("serverConfig: %+v", global.ServerConfig)
+	jsonStr, _ := json.Marshal(global.ServerConfig)
+	log.Printf("serverConfig: %s", jsonStr)
 	app := cmd.InitApp()
 	ginRouter := router.InitRouter(app)
 	InitHttpServer(ginRouter)
