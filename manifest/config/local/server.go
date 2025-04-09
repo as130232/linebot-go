@@ -11,7 +11,7 @@ func CreateServerConfig() config.ServerConfig {
 	if len(port) == 0 {
 		port = "8081"
 	}
-	lineBotChannelSecret := os.Getenv("LINE_BOT_CHANNEL_TOKEN")
+	lineBotChannelSecret := os.Getenv("LINE_BOT_CHANNEL_SECRET")
 	lineBotChannelToken := os.Getenv("LINE_BOT_CHANNEL_TOKEN")
 	return config.ServerConfig{
 		HttpServer: &config.HttpServerConfig{Address: ":" + port, Mode: gin.ReleaseMode},
