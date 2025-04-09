@@ -9,6 +9,7 @@ type ServerConfig struct {
 type LineConfig struct {
 	ChannelId     string
 	ChannelSecret string
+	ChannelToken  string
 }
 type HttpServerConfig struct {
 	Address    string

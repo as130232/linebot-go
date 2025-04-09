@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"linebot-go/cmd"
 	"linebot-go/global"
 	"linebot-go/infrastructure/config"
 	"linebot-go/interface/http/router"
@@ -25,8 +26,8 @@ func main() {
 	// start
 	global.AppName = "lineBot"
 	global.ServerConfig = config.NewServerConfig()
-
-	ginRouter := router.InitRouter()
+	app := cmd.InitApp()
+	ginRouter := router.InitRouter(app)
 	InitHttpServer(ginRouter)
 
 }
@@ -36,7 +37,6 @@ func InitHttpServer(ginRouter *gin.Engine) {
 		Addr:    global.ServerConfig.HttpServer.Address,
 		Handler: ginRouter,
 	}
-
 	// 設置信號通道
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
