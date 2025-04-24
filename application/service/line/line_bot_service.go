@@ -133,7 +133,6 @@ func (b *BotService) CallbackHandler(c *gin.Context) {
 				//if err := replyText(e.ReplyToken, ret); err != nil {
 				//	log.Print(err)
 				//}
-
 			// Handle only video message
 			case webhook.VideoMessageContent:
 				log.Println("Got video msg ID:", message.Id)
