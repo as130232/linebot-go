@@ -39,11 +39,9 @@ func NewBotService() *BotService {
 }
 
 func (b *BotService) CallbackHandler(c *gin.Context) {
-	log.Printf("---CallbackHandler.")
 	channelSecret := global.ServerConfig.LineConfig.ChannelSecret
 	cb, err := webhook.ParseRequest(channelSecret, c.Request)
-	log.Printf("---cb:%+v", cb)
-	log.Printf("---err:%+v", err)
+	log.Printf("CallbackHandler. cb: %+v", cb)
 	if err != nil {
 		if errors.Is(err, linebot.ErrInvalidSignature) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -55,8 +53,6 @@ func (b *BotService) CallbackHandler(c *gin.Context) {
 
 	for k := range cb.Events {
 		event := cb.Events[k]
-		log.Printf("Got event %v", event)
-
 		switch e := event.(type) {
 		//訊息事件
 		case webhook.MessageEvent:
@@ -65,41 +61,22 @@ func (b *BotService) CallbackHandler(c *gin.Context) {
 			// Handle only on text message
 			case webhook.TextMessageContent:
 				req := message.Text
-				// 檢查是否已經有這個用戶的 ChatSession or req == "reset"
-
 				// 取得用戶 ID
-				var uID string
-				switch source := e.Source.(type) {
-				case *webhook.UserSource:
-					uID = source.UserId
-				case *webhook.GroupSource:
-					uID = source.UserId
-				case *webhook.RoomSource:
-					uID = source.UserId
-				}
-
-				// 檢查是否已經有這個用戶的 ChatSession
-				cs, ok := userSessions[uID]
-				if !ok {
-					// 如果沒有，則創建一個新的 ChatSession
-					cs = ""
-					userSessions[uID] = cs
-				}
-				if req == "reset" {
-					// 如果需要重置記憶，創建一個新的 ChatSession
-					cs = ""
-					userSessions[uID] = cs
-					if err := b.replyText(e.ReplyToken, "很高興初次見到你，請問有什麼想了解的嗎？"); err != nil {
-						log.Print(err)
-					}
-					continue
-				}
-				// 使用這個 ChatSession 來處理訊息 & Reply with Gemini result
-				//res := send(cs, req)
-				//ret := printResponse(res)
-				//if err := b.replyText(e.ReplyToken, ret); err != nil {
-				//	log.Print(err)
+				//var uID string
+				//switch source := e.Source.(type) {
+				//case *webhook.UserSource:
+				//	uID = source.UserId
+				//case *webhook.GroupSource:
+				//	uID = source.UserId
+				//case *webhook.RoomSource:
+				//	uID = source.UserId
 				//}
+
+				if err := b.replyText(e.ReplyToken, req); err != nil {
+					log.Print(err)
+				}
+				continue
+
 			// Handle only on Sticker message
 			case webhook.StickerMessageContent:
 				var kw string
